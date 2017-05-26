@@ -14,34 +14,25 @@ GPUInfo* CreateGPUInfo()
 
 GPUInfo::GPUInfo()
 {
-#if 0
    cudaError_t error_id = cudaGetDeviceCount(&m_nGPUS);
 
    if(error_id != cudaSuccess)
    {
       m_nGPUS = 0;
    }
-#else
-   m_nGPUS = 0;
-#endif
-
 }
 
-list<string> GPUInfo::GetGPUProps(uint32_t idx)
+std::vector<string> GPUInfo::GetGPUProps(uint32_t idx)
 {
-   char buf[64];
+   char buf[128];
 
    // TODO: verify index is in bounds
-   list<string> strlist;
+   vector<string> strlist;
 
    sprintf_s(buf, "GPU index %d:", idx);
    strlist.push_back(buf);
-   strlist.push_back("GPU Prop \t 1");
-   strlist.push_back("GPU Prop \t 2");
-   strlist.push_back("GPU Prop \t 3");
-   strlist.push_back("GPU Prop \t 4");
 
-#if 0
+#if 1
    int32_t deviceCount = 0;
    cudaError_t error_id = cudaGetDeviceCount(&deviceCount);
 
@@ -52,7 +43,7 @@ list<string> GPUInfo::GetGPUProps(uint32_t idx)
       return strlist;
    }
 
-   if((int32_t)idx <= deviceCount - 1 )
+   if((int32_t)idx > deviceCount - 1 )
    {
       sprintf_s(buf, "Invalid index %d.  cuda device count: %d", idx, deviceCount);
       strlist.push_back(buf);

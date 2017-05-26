@@ -6,17 +6,18 @@
 GPUInfoView::GPUInfoView(GPUInfo *pGPU) : m_pGPU(pGPU)
 {
    addControls(m_pGPU->GetNumGPUs());
-   if(m_pMsgBox)
+   // If there was only one GPU, there won't be a control that causes
+   // property updates
+   if(1 == m_pGPU->GetNumGPUs())
    {
-      m_pMsgBox->append("Line\t 1");
-      m_pMsgBox->append("Line\t 2");
+      GPUPropUpdate(0);
    }
 }
 
 void GPUInfoView::GPUPropUpdate(int gpuIdx)
 {
    char buf[128];
-   list<string> strlist;
+   vector<string> strlist;
 
    if(gpuIdx >= 0 && gpuIdx <= m_pGPU->GetNumGPUs())
    {
@@ -30,7 +31,7 @@ void GPUInfoView::GPUPropUpdate(int gpuIdx)
 
    m_pMsgBox->clear();
 
-   for(list<string>::iterator it = strlist.begin(); it != strlist.end(); ++it)
+   for(vector<string>::iterator it = strlist.begin(); it != strlist.end(); ++it)
    {
       m_pMsgBox->append(QString::fromStdString(*it));
 
