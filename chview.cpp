@@ -2,10 +2,12 @@
 #include <QGridLayout>
 #include <QLabel>
 
-ChView::ChView(const QString &title) : QDockWidget(title)
+ChView::ChView(const QString &title, chinfo *pCh) : QDockWidget(title)
 {
    setAttribute(Qt::WA_DeleteOnClose);
+
    addControls();
+
 }
 
 void ChView::addControls()

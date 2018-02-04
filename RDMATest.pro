@@ -20,13 +20,15 @@ SOURCES += main.cpp \
            mainwindow.cpp \
            chview.cpp \
            chcapture.cpp \
-           gpuinfoview.cpp
+           gpuinfoview.cpp \
+    chinfo.cpp
 
 HEADERS  += mainwindow.h \
             chview.h \
             chcapture.h \
             gpuinfo.h \
-            gpuinfoview.h
+            gpuinfoview.h \
+    chinfo.h
 
 
 # This makes the .cu files appear in your project

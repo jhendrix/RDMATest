@@ -252,5 +252,18 @@ std::vector<string> GPUInfo::GetGPUProps(uint32_t idx)
     strlist.push_back(sProfileString);
 #endif
 
-   return strlist;
+    return strlist;
+}
+
+void* GPUInfo::AllocMem(uint32_t nMB)
+{
+   cudaError_t ret = cudaMalloc(&m_dvcBufPtr, nMB * 0x00100000);
+
+   if(cudaSuccess != ret)
+   {
+      m_dvcBufPtr = nullptr;
+   }
+
+   return m_dvcBufPtr;
+
 }
