@@ -13,7 +13,6 @@ TEMPLATE = app
 
 # Define output directories
 #DESTDIR = release
-#OBJECTS_DIR = release/obj
 #CUDA_OBJECTS_DIR = release/cuda
 
 SOURCES += main.cpp \
@@ -35,21 +34,28 @@ HEADERS  += mainwindow.h \
 OTHER_FILES +=  gpuinfo.cu
 
 
-INCLUDEPATH += "K:/Program Files/NVIDIA GPU Computing Toolkit/v8.0/include"
+#INCLUDEPATH += "K:/Program Files/NVIDIA GPU Computing Toolkit/v8.0/include"
 
-LIBS += -LD:"K:/Program Files/NVIDIA GPU Computing Toolkit/v8.0/lib/x64/"
+#LIBS += -LD:"K:/Program Files/NVIDIA GPU Computing Toolkit/v8.0/lib/x64/"
 
 CUDA_SOURCES +=  gpuinfo.cu
-CUDA_DIR = $$(CUDA_PATH)
-CUDA_LIB_PATH = $$CUDA_DIR/lib/x64
+
+unix:CUDA_PATH = /usr/local/cuda
+
+CUDA_DIR = $$CUDA_PATH
+win32:CUDA_LIB_PATH = $$CUDA_DIR/lib/x64
+CUDA_LIB_PATH = $$CUDA_DIR/lib64
 CUDA_BIN_PATH = $$CUDA_DIR/bin
 CUDA_INC_PATH = $$CUDA_DIR/include
-SYSTEM_NAME = Win64
 
-unix:LIBS += -lcuda
+SYSTEM_NAME = unix
+
+unix:LIBS += -L$$CUDA_LIB_PATH -lcudart
 
 win32:LIBS += $$CUDA_LIB_PATH/cuda.lib $$CUDA_LIB_PATH/cudart.lib
 
+message("LIBS")
+message($$LIBS)
 
 QMAKE_CUC = $(CUDA_BIN_PATH)/nvcc.exe
 
@@ -78,11 +84,10 @@ Release:QMAKE_CUFLAGS += $$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE $$QMAKE_CXXFL
     QMAKE_CUEXTRAFLAGS += $(DEFINES) $(INCPATH) $$join(QMAKE_COMPILER_DEFINES, " -D", -D)
     QMAKE_CUEXTRAFLAGS += -c
 
-Debug:OBJECTS_DIR = $$OUT_PWD/debug
-Release:OBJECTS_DIR = $$OUT_PWD/release
+    OBJECTS_DIR = $$OUT_PWD/obj
 
     cu.commands = $$QMAKE_CUC $$QMAKE_CUEXTRAFLAGS -o $$OBJECTS_DIR/$${QMAKE_CPP_MOD_CU}${QMAKE_FILE_BASE}$${QMAKE_EXT_OBJ} ${QMAKE_FILE_NAME}$$escape_expand(\n\t)
-    cu.output = $$OBJECTS_DIR/$${QMAKE_CPP_MOD_CU}${QMAKE_FILE_BASE}$${QMAKE_EXT_OBJ} # $$OBJECTS_DIR/$${QMAKE_CPP_MOD_CU}${QMAKE_FILE_BASE}$${QMAKE_EXT_OBJ}
+    cu.output = $$OBJECTS_DIR/$${QMAKE_CPP_MOD_CU}${QMAKE_FILE_BASE}$${QMAKE_EXT_OBJ}
 
 
     silent:cu.commands = @echo nvcc ${QMAKE_FILE_IN} && $$cu.commands
